@@ -28,31 +28,11 @@ class Player extends Entity {
 		direction = new FastVector2(0, 1);
 		display = new Sprite("ship");
 		collision = new CollisionBox();
-		display.offsetX = -15;
-		display.offsetY = -10;
-		display.scaleX = display.scaleY = 1;
-
-		collision.width = 10;
-		collision.height = 30;
-		collision.x = X;
-		collision.y = Y;
-		collision.maxVelocityX = 500;
-		collision.dragX = 0.9;
-
+		setCollisions(X,Y);	
+		setDisplay();
 		layer.addChild(display);
-
 		gun = new Gun();
 		addChild(gun);
-
-		display.smooth = false;
-
-		/*
-				collision.width = display.width();
-			collision.height = display.height() * 0.5;
-			display.pivotX = display.width() * 0.5;
-			display.offsetY = -display.height() * 0.5;
-
-		 */
 	}
 
 	override function update(dt:Float):Void {
@@ -102,10 +82,27 @@ class Player extends Entity {
 				}
 			}
 		}
-		if (id == XboxJoystick.A) {
-			gun.shoot(x , y - height * 0.75, direction.x, -direction.y);
+		if (id == XboxJoystick.A && !Input.i.isKeyCodeReleased(Space)) {
+			gun.shoot(x+23 , y - 115, direction.x, -direction.y);
 		}
 	}
 
 	public function onAxisChange(id:Int, value:Float) {}
+
+	inline function setCollisions(X:Float,Y:Float) {
+		collision.width =64;
+		collision.height = 57;
+		collision.x = X;
+		collision.y = Y;
+		collision.maxVelocityX = 500;
+		collision.dragX = 0.9;
+		collision.userData = this;
+	}
+
+	inline function setDisplay() {
+		display.pivotX = display.width() * 0.5;
+		display.offsetX = -38;
+		display.offsetY =-10;
+		display.scaleX = display.scaleY = 1;
+	}
 }
