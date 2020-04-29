@@ -10,7 +10,7 @@ import com.gEngine.display.Layer;
 import com.framework.utils.Entity;
 
 class Player extends Entity {
-	var maxSpeed = 200;
+	static inline var MAX_SPEED = 200;
 
 	public var gun:Gun;
 
@@ -64,7 +64,7 @@ class Player extends Entity {
 	public function onButtonChange(id:Int, value:Float) {
 		if (id == XboxJoystick.LEFT_DPAD) {
 			if (value == 1) {
-				collision.accelerationX = -maxSpeed * 4;
+				collision.accelerationX = -MAX_SPEED * 4;
 				display.scaleX = -Math.abs(display.scaleX);
 			} else {
 				if (collision.accelerationX < 0) {
@@ -74,7 +74,7 @@ class Player extends Entity {
 		}
 		if (id == XboxJoystick.RIGHT_DPAD) {
 			if (value == 1) {
-				collision.accelerationX = maxSpeed * 4;
+				collision.accelerationX = MAX_SPEED * 4;
 				display.scaleX = Math.abs(display.scaleX);
 			} else {
 				if (collision.accelerationX > 0) {

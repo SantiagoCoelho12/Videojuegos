@@ -12,8 +12,8 @@ class Bullet extends Entity {
 
 	var display:Sprite;
 	var counter:Float;
-	var MAX_COUNTER:Float = 6;
-	var BALL_VELOCITY:Float = 700;
+	static inline var MAX_COUNTER:Float = 6;
+	static inline var BALL_VELOCITY:Float = 700;
 
 	public function new() {
 		super();

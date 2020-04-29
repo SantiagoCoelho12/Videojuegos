@@ -62,6 +62,9 @@ class GameState extends State {
 		super.update(dt);
 		CollisionEngine.overlap(ship.collision, ballsColiision, deathPlayer);
 		CollisionEngine.overlap(ship.gun.bulletsCollisions, ballsColiision, ballExplodes);
+		if(Input.i.isKeyCodePressed(KeyCode.Escape)){
+            changeState(new GameState()); 
+        }
 	}
 
 	override function render() {
@@ -99,7 +102,9 @@ class GameState extends State {
 		}
 	}
 
-	public function deathPlayer(a:ICollider, b:ICollider) {}
+	public function deathPlayer(a:ICollider, b:ICollider) {
+		changeState(new GameOver());
+	}
 
 	#if DEBUGDRAW
 	override function draw(framebuffer:kha.Canvas) {

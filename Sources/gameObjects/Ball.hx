@@ -1,5 +1,7 @@
 package gameObjects;
 
+import com.gEngine.helper.Screen;
+import kha.math.FastVector2;
 import com.gEngine.display.Layer;
 import com.collision.platformer.CollisionGroup;
 import com.collision.platformer.CollisionBox;
@@ -8,31 +10,41 @@ import com.framework.utils.Entity;
 import GlobalGameData.GGD;
 
 class Ball extends Entity {
+	private static inline var RADIO = 120;
+	private static inline var GROUND_LIMIT= 80;
 	var display:Sprite;
     var collision:CollisionBox;
-
-	static inline var vel:Float = 100;
-
 	var collisionGroup:CollisionGroup;
+	var screenWidth:Int;
+	var screenHeight:Int;
+	var velocity:FastVector2;
 
 	public function new(layer:Layer, collisions:CollisionGroup) {
 		super();
+		screenHeight = Screen.getHeight();
+		screenWidth = Screen.getWidth();
+		velocity = new FastVector2(130,130);
 		collisionGroup = collisions;
 		display = new Sprite("ball");
-		layer.addChild(display);
-		display.scaleX = display.scaleY = 0.5;
         collision = new CollisionBox();
-        display.offsetX = -65; 
-        display.offsetY  =0;
-		collision.width = (display.width() * 0.5)-3;
-		collision.height = (display.height() * 0.5)-3;
-		collision.userData = this;
+		layer.addChild(display);
+        setCollisionsAnddisplay();
 		collisions.add(collision);
         randomPos();
 	}
 
 	override public function update(dt:Float):Void {
-        super.update(dt);
+		super.update(dt);
+		collision.x += velocity.x*dt;
+		collision.y += velocity.y*dt;
+		if(collision.x < 0 || collision.x+RADIO > screenWidth){
+            velocity.x *= -1;
+		}
+
+		if(collision.y+RADIO > screenHeight-GROUND_LIMIT || collision.y < 0){
+            velocity.y *= -1;
+		}
+		
         collision.update(dt);
 	}
 
@@ -46,6 +58,15 @@ class Ball extends Entity {
 		collision.removeFromParent();
         collisionGroup.remove(collision);
         display.removeFromParent();
+	}
+
+	private inline function setCollisionsAnddisplay() {
+		display.scaleX = display.scaleY = 0.5;
+		display.offsetX = -65; 
+        display.offsetY  =0;
+		collision.width = (display.width() * 0.5)-3;
+		collision.height = (display.height() * 0.5)-3;
+		collision.userData = this;
 	}
 
 	private function randomPos() {
