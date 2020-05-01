@@ -61,10 +61,10 @@ class GameState extends State {
 	override function update(dt:Float) {
 		super.update(dt);
 		CollisionEngine.overlap(ship.collision, ballsColiision, deathPlayer);
+		// CollisionEngine.overlap(ship.collision, smallsBallsColiision, deathPlayer);
 		CollisionEngine.overlap(ship.gun.bulletsCollisions, ballsColiision, ballExplodes);
-		if(Input.i.isKeyCodePressed(KeyCode.Escape)){
-            changeState(new GameState()); 
-        }
+		// CollisionEngine.overlap(ship.gun.bulletsCollisions, smallsBallsColiision, smallBallExplodes);
+		resetGame();
 	}
 
 	override function render() {
@@ -97,8 +97,14 @@ class GameState extends State {
 		bullet.die();
 		count++;
 		for (i in 0...2) {
-			var ball:Ball = new Ball(simulationLayer, ballsColiision);
+			var ball:Ball = new Ball(simulationLayer, ballsColiision, ball, i);
 			addChild(ball);
+		}
+	}
+
+	inline function resetGame() {
+		if (Input.i.isKeyCodePressed(KeyCode.Escape)) {
+			changeState(new GameState());
 		}
 	}
 
