@@ -28,6 +28,7 @@ class GameState extends State {
 	var count:Int = 1;
 	var touchJoystick:VirtualGamepad;
 	var ballsColiision:CollisionGroup;
+	var smallsBallsColiision:CollisionGroup;
 
 	override function load(resources:Resources) {
 		screenWidth = GEngine.i.width;
@@ -43,6 +44,7 @@ class GameState extends State {
 	override function init() {
 		loadBackground();
 		ballsColiision = new CollisionGroup();
+		smallsBallsColiision = new CollisionGroup();
 		simulationLayer = new Layer();
 		stage.addChild(simulationLayer);
 
@@ -61,9 +63,9 @@ class GameState extends State {
 	override function update(dt:Float) {
 		super.update(dt);
 		CollisionEngine.overlap(ship.collision, ballsColiision, deathPlayer);
-		// CollisionEngine.overlap(ship.collision, smallsBallsColiision, deathPlayer);
+		CollisionEngine.overlap(ship.collision, smallsBallsColiision, deathPlayer);
 		CollisionEngine.overlap(ship.gun.bulletsCollisions, ballsColiision, ballExplodes);
-		// CollisionEngine.overlap(ship.gun.bulletsCollisions, smallsBallsColiision, smallBallExplodes);
+		CollisionEngine.overlap(ship.gun.bulletsCollisions, smallsBallsColiision, smallBallExplodes);
 		resetGame();
 	}
 
@@ -92,14 +94,26 @@ class GameState extends State {
 
 	public function ballExplodes(a:ICollider, b:ICollider) {
 		var ball:Ball = cast b.userData;
+		var X:Float = ball.get_x();
+		var Y:Float = ball.get_y();
 		ball.explode();
 		var bullet:Bullet = cast a.userData;
 		bullet.die();
 		count++;
 		for (i in 0...2) {
-			var ball:Ball = new Ball(simulationLayer, ballsColiision, ball, i);
+			var ball:Ball = new Ball(simulationLayer, smallsBallsColiision, X, Y, i);
 			addChild(ball);
 		}
+	}
+
+	public function smallBallExplodes(a:ICollider, b:ICollider) {
+		var ball:Ball = cast b.userData;
+		ball.explode();
+		var bullet:Bullet = cast a.userData;
+		bullet.die();
+		count++;
+		var ball:Ball = new Ball(simulationLayer, ballsColiision);
+		addChild(ball);
 	}
 
 	inline function resetGame() {

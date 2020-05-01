@@ -19,8 +19,9 @@ class Ball extends Entity {
 	var screenWidth:Int;
 	var screenHeight:Int;
 	var velocity:FastVector2;
+	var reverseBall:Bool;
 
-	public function new(layer:Layer, collisions:CollisionGroup, father:Ball = null, i:Int = 0) {
+	public function new(layer:Layer, collisions:CollisionGroup, X:Float = 0, Y:Float = 0, i:Int = 0) {
 		super();
 		screenHeight = Screen.getHeight();
 		screenWidth = Screen.getWidth();
@@ -30,9 +31,12 @@ class Ball extends Entity {
 		collision = new CollisionBox();
 		layer.addChild(display);
 		setCollisionsAnddisplay();
-		collisions.add(collision);
-		if (father != null) {
-			createSubBall(father, i);
+		if (i == 1)
+			reverseBall = true;
+		else
+			reverseBall = false;
+		if (X != 0 && Y != 0) {
+			createSubBall(X, Y);
 		} else {
 			randomPos();
 		}
@@ -40,7 +44,9 @@ class Ball extends Entity {
 
 	override public function update(dt:Float):Void {
 		super.update(dt);
-		collision.x += velocity.x * dt;
+		if (reverseBall) collision.x += velocity.x * dt * -1;
+	 	else collision.x += velocity.x * dt;
+	
 		collision.y += velocity.y * dt;
 		if (collision.x < 0 || collision.x + RADIO > screenWidth) {
 			velocity.x *= -1;
@@ -74,14 +80,23 @@ class Ball extends Entity {
 		collision.userData = this;
 	}
 
-	private function createSubBall(father:Ball, i:Int) {
-		var side = 1;
-		if (i == 0)
-			side = -1;
+	private function createSubBall(X:Float, Y:Float) {
+		/*
+			collisionGroup.add(collision);
+			collision.x = X * side;
+			collision.y = Y;
+			display.scaleX = display.scaleY = 0.25;
+			collision.width = (display.width() * 0.25) - 3;
+			collision.height = (display.height() * 0.25) - 3;
+		 */
+		 
 		collisionGroup.add(collision);
-		collision.x = father.collision.x * side;
-		collision.y = father.collision.y;
+		collision.x = X;
+		collision.y = Y;
 		display.scaleX = display.scaleY = 0.25;
+		collision.width = (display.width() * 0.25);
+		collision.height = (display.height() * 0.25);
+		display.offsetX = -33;
 	}
 
 	public function get_x():Float {
@@ -89,7 +104,7 @@ class Ball extends Entity {
 	}
 
 	public function get_y():Float {
-		return collision.y + collision.height*0.5;
+		return collision.y + collision.height * 0.5;
 	}
 
 	private function randomPos() {
