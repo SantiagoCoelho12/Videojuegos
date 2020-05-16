@@ -138,7 +138,7 @@ class GameState extends State {
 		ball.explode();
 		var bullet:Bullet = cast a.userData;
 		bullet.die();
-		count++;
+		++count;
 		var ball:Ball = new Ball(simulationLayer, ballsColiision);
 		addChild(ball);
 	}

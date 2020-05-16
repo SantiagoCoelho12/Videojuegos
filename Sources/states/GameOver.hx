@@ -39,7 +39,7 @@ class GameOver extends State {
 		var image = new Sprite("gameOver");
 		image.x = GEngine.virtualWidth * 0.5 - image.width() * 0.5;
 		image.y = 100;
-		image.scaleX = image.scaleY = 0.5;
+		image.scaleX = image.scaleY = 1.5;
 		image.offsetX = -100;
 		// image.offsetY = 100;
 		stage.addChild(image);
