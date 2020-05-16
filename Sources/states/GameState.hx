@@ -1,5 +1,11 @@
 package states;
 
+import com.loading.basicResources.SparrowLoader;
+import com.loading.basicResources.FontLoader;
+import kha.Assets;
+import kha.Font;
+import com.gEngine.display.Text;
+import com.gEngine.display.StaticLayer;
 import gameObjects.Bullet;
 import com.collision.platformer.ICollider;
 import com.collision.platformer.CollisionGroup;
@@ -24,11 +30,14 @@ class GameState extends State {
 	var screenHeight:Int;
 	var background:Sprite;
 	var ship:Player;
+	//var penguin:Player;
 	var simulationLayer:Layer;
 	var count:Int = 1;
+	var score:Text;
 	var touchJoystick:VirtualGamepad;
 	var ballsColiision:CollisionGroup;
 	var smallsBallsColiision:CollisionGroup;
+	var hudLayer:StaticLayer;
 
 	override function load(resources:Resources) {
 		screenWidth = GEngine.i.width;
@@ -36,8 +45,10 @@ class GameState extends State {
 		var atlas:JoinAtlas = new JoinAtlas(2048, 2048);
 		atlas.add(new ImageLoader("background"));
 		atlas.add(new ImageLoader("ship"));
+		//atlas.add(new SparrowLoader("penguin", "penguin.xml"));
 		atlas.add(new ImageLoader("ball"));
 		atlas.add(new ImageLoader("bullet"));
+		atlas.add(new FontLoader(Assets.fonts.Kenney_ThickName,30));
 		resources.add(atlas);
 	}
 
@@ -55,6 +66,22 @@ class GameState extends State {
 		GGD.simulationLayer = simulationLayer;
 		GGD.camera = stage.defaultCamera();
 
+		//penguin = new Player(1280/2, 720/2, simulationLayer);
+		//addChild(penguin);
+
+		//GGD.player = penguin;
+		//GGD.simulationLayer = simulationLayer;
+		//GGD.camera = stage.defaultCamera();
+
+		hudLayer = new StaticLayer();
+		stage.addChild(hudLayer);
+		score = new Text(Assets.fonts.Kenney_ThickName);
+		score.x = GEngine.virtualWidth / 2.5;
+		score.y = 30;
+		hudLayer.addChild(score);
+	//	score.text = "Puntaje: " + count;
+	//	GGD.camera.scale = 2;
+
 		var ball:Ball = new Ball(simulationLayer, ballsColiision);
 		addChild(ball);
 		createTouchJoystick();
@@ -66,6 +93,7 @@ class GameState extends State {
 		CollisionEngine.overlap(ship.collision, smallsBallsColiision, deathPlayer);
 		CollisionEngine.overlap(ship.gun.bulletsCollisions, ballsColiision, ballExplodes);
 		CollisionEngine.overlap(ship.gun.bulletsCollisions, smallsBallsColiision, smallBallExplodes);
+		score.text="Puntaje " + "    " + count +"";
 		resetGame();
 	}
 
@@ -123,7 +151,7 @@ class GameState extends State {
 	}
 
 	public function deathPlayer(a:ICollider, b:ICollider) {
-		changeState(new GameOver());
+		changeState(new GameOver(count + ""));
 	}
 
 	#if DEBUGDRAW
