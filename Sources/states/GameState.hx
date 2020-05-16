@@ -32,7 +32,7 @@ class GameState extends State {
 	var ship:Player;
 	//var penguin:Player;
 	var simulationLayer:Layer;
-	var count:Int = 1;
+	var count:Int = 0;
 	var score:Text;
 	var touchJoystick:VirtualGamepad;
 	var ballsColiision:CollisionGroup;
@@ -115,7 +115,6 @@ class GameState extends State {
 		touchJoystick.addKeyButton(XboxJoystick.UP_DPAD, KeyCode.Up);
 		touchJoystick.addKeyButton(XboxJoystick.A, KeyCode.Space);
 		touchJoystick.notify(ship.onAxisChange, ship.onButtonChange);
-
 		var gamepad = Input.i.getGamepad(0);
 		gamepad.notify(ship.onAxisChange, ship.onButtonChange);
 	}
@@ -151,7 +150,7 @@ class GameState extends State {
 	}
 
 	public function deathPlayer(a:ICollider, b:ICollider) {
-		changeState(new GameOver(count + ""));
+		changeState(new GameOver(count));
 	}
 
 	#if DEBUGDRAW

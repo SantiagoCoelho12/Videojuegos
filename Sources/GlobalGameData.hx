@@ -10,6 +10,7 @@ class GlobalGameData {
     public static var camera:Camera;
 
     public static function destroy() {
+        player.destroy();
         player=null;
         simulationLayer=null;
         camera=null;

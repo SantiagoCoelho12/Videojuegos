@@ -1,5 +1,7 @@
 package gameObjects;
 
+import com.gEngine.GEngine;
+import GlobalGameData.GGD;
 import com.framework.utils.Input;
 import kha.input.KeyCode;
 import com.framework.utils.XboxJoystick;
@@ -44,6 +46,8 @@ class Player extends Entity {
 	override function update(dt:Float):Void {
 		super.update(dt);
 		collision.update(dt);
+		if(collision.x > GEngine.i.width) collision.x = -collision.width;
+		if(collision.x+collision.width < 0) collision.x =  GEngine.i.width;
 	}
 
 	override function render() {
