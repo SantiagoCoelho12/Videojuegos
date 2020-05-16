@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:1ccff6b3015e0ddc31d3b42d97881faa:a1e2cacee6dba0e3223231c8e72062b5:c757ece52d6e89c08ab0db3615097cda$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+pX => x pos of the pivot point (relative to sprite width)
+pY => y pos of the pivot point (relative to sprite height)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+with polygon mode enabled:
+vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
+verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
+triangles  => sprite triangulation, 3 vertex indices per triangle
+-->
+<TextureAtlas imagePath="pen.png" width="125" height="1281">
+    <sprite n="penguin1.png" x="55" y="649" w="62" h="80" pX="0.5" pY="0.5"/>
+    <sprite n="penguin2.png" x="0" y="494" w="50" h="76" pX="0.5" pY="0.5"/>
+    <sprite n="penguin3.png" x="53" y="344" w="60" h="74" pX="0.5" pY="0.5"/>
+    <sprite n="penguin4.png" x="0" y="729" w="65" h="80" pX="0.5" pY="0.5"/>
+    <sprite n="penguin5.png" x="0" y="649" w="55" h="78" pX="0.5" pY="0.5"/>
+    <sprite n="penguin6.png" x="65" y="729" w="56" h="81" pX="0.5" pY="0.5"/>
+    <sprite n="penguin7.png" x="0" y="271" w="56" h="73" pX="0.5" pY="0.5"/>
+    <sprite n="penguin8.png" x="56" y="271" w="58" h="73" pX="0.5" pY="0.5"/>
+    <sprite n="penguin9.png" x="50" y="494" w="60" h="77" pX="0.5" pY="0.5"/>
+    <sprite n="penguin10.png" x="62" y="198" w="53" h="73" pX="0.5" pY="0.5"/>
+    <sprite n="penguin11.png" x="0" y="810" w="55" h="82" pX="0.5" pY="0.5"/>
+    <sprite n="penguin12.png" x="0" y="571" w="64" h="78" pX="0.5" pY="0.5"/>
+    <sprite n="penguin13.png" x="0" y="344" w="53" h="74" pX="0.5" pY="0.5"/>
+    <sprite n="penguin14.png" x="64" y="571" w="56" h="78" pX="0.5" pY="0.5"/>
+    <sprite n="penguin15.png" x="0" y="59" w="59" h="60" pX="0.5" pY="0.5"/>
+    <sprite n="penguin16.png" x="0" y="126" w="62" h="72" pX="0.5" pY="0.5"/>
+    <sprite n="penguin17.png" x="55" y="810" w="63" h="82" pX="0.5" pY="0.5"/>
+    <sprite n="penguin18.png" x="0" y="418" w="57" h="76" pX="0.5" pY="0.5"/>
+    <sprite n="penguin19.png" x="57" y="418" w="63" h="76" pX="0.5" pY="0.5"/>
+    <sprite n="penguin20.png" x="62" y="126" w="63" h="72" pX="0.5" pY="0.5"/>
+    <sprite n="penguin21.png" x="0" y="198" w="62" h="72" pX="0.5" pY="0.5"/>
+    <sprite n="penguin22.png" x="59" y="59" w="59" h="67" pX="0.5" pY="0.5"/>
+    <sprite n="penguin23.png" x="0" y="0" w="70" h="59" pX="0.5" pY="0.5"/>
+    <sprite n="penguin24.png" x="0" y="1178" w="48" h="100" pX="0.5" pY="0.5"/>
+    <sprite n="penguin25.png" x="50" y="985" w="49" h="96" pX="0.5" pY="0.5"/>
+    <sprite n="penguin26.png" x="52" y="1081" w="52" h="97" pX="0.5" pY="0.5"/>
+    <sprite n="penguin27.png" x="0" y="892" w="53" h="91" pX="0.5" pY="0.5"/>
+    <sprite n="penguin28.png" x="0" y="1081" w="52" h="96" pX="0.5" pY="0.5"/>
+    <sprite n="penguin29.png" x="48" y="1178" w="51" h="103" pX="0.5" pY="0.5"/>
+    <sprite n="penguin30.png" x="53" y="892" w="54" h="93" pX="0.5" pY="0.5"/>
+    <sprite n="penguin31.png" x="0" y="985" w="50" h="94" pX="0.5" pY="0.5"/>
+</TextureAtlas>
