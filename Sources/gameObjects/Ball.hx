@@ -1,5 +1,6 @@
 package gameObjects;
 
+import js.lib.Math;
 import com.gEngine.helper.Screen;
 import kha.math.FastVector2;
 import com.gEngine.display.Layer;
@@ -109,14 +110,7 @@ class Ball extends Entity {
 
 	private function randomPos() {
 		collisionGroup.add(collision);
-		var target:Player = GGD.player;
-		var dirX = 1 - Math.random() * 2;
-		var dirY = 1 - Math.random() * 2;
-		if (dirX == 0 && dirY == 0) {
-			dirX += 1;
-		}
-		var length = Math.sqrt(dirX * dirX + dirY * dirY);
-		collision.x = target.x + 500 * dirX / length;
+		collision.x = (screenHeight)*Math.random();
 		collision.y = 0;
 	}
 }

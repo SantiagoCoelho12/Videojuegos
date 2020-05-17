@@ -1,5 +1,6 @@
 package states;
 
+import GlobalGameData.GGD;
 import gameObjects.Player;
 import com.gEngine.display.Sprite;
 import kha.Color;
@@ -49,6 +50,7 @@ class GameOver extends State {
 		textScore.y = GEngine.virtualHeight / 2;
 		textScore.color = Color.Purple;
 		stage.addChild(textScore);
+		GGD.destroy();
 	}
 
 	override function update(dt:Float) {

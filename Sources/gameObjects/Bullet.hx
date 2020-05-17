@@ -38,8 +38,11 @@ class Bullet extends Entity {
 
 	override function update(dt:Float) {
 		counter += dt;
-		if (counter > MAX_COUNTER)
+		if (counter > MAX_COUNTER){
 			die();
+			limboStart();
+		}
+			
 		collision.update(dt);
 		display.x = collision.x;
 		display.y = collision.y;

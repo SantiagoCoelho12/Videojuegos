@@ -1,5 +1,7 @@
 package gameObjects;
 
+import js.html.TimeElement;
+import com.gEngine.helper.Timeline;
 import com.gEngine.GEngine;
 import GlobalGameData.GGD;
 import com.framework.utils.Input;
@@ -18,6 +20,7 @@ class Player extends Entity {
 
 	var direction:FastVector2;
 	var display:Sprite;
+	var levitationArray:Array<Float> = [-0.1, 0, 0.1];
 
 	public var collision:CollisionBox;
 	public var x(get, null):Float;
@@ -46,9 +49,13 @@ class Player extends Entity {
 	override function update(dt:Float):Void {
 		super.update(dt);
 		collision.update(dt);
-		if(collision.x > GEngine.i.width) collision.x = -collision.width;
-		if(collision.x+collision.width < 0) collision.x =  GEngine.i.width;
+		if (collision.x > GEngine.i.width)
+			collision.x = -collision.width;
+		if (collision.x + collision.width < 0)
+			collision.x = GEngine.i.width;
 	}
+
+	inline function levitation() {}
 
 	override function render() {
 		display.x = collision.x + collision.width * 0.5;
@@ -147,15 +154,15 @@ class Player extends Entity {
 			}
 		}
 		if (id == XboxJoystick.A && !Input.i.isKeyCodeReleased(Space)) {
-			gun.shoot(x+23 , y - 115, direction.x, -direction.y);
+			gun.shoot(x + 23, y - 115, direction.x, -direction.y);
 		}
 	}
 
 	public function onAxisChange(id:Int, value:Float) {}
 
-	inline function setCollisions(X:Float,Y:Float) {
-		collision.width =64;
-		collision.height = 57;
+	inline function setCollisions(X:Float, Y:Float) {
+		collision.width = display.width() * 0.8;
+		collision.height = display.height() * 0.8;
 		collision.x = X;
 		collision.y = Y;
 		collision.maxVelocityX = 500;
@@ -164,9 +171,9 @@ class Player extends Entity {
 	}
 
 	inline function setDisplay() {
-		display.pivotX = display.width() * 0.5;
 		display.offsetX = -38;
-		display.offsetY =-10;
-		display.scaleX = display.scaleY = 1;
-	}
+		display.offsetY = -10;
+		display.pivotX = display.width() * 0.5;
+		display.pivotY = display.height();
+	};
 }

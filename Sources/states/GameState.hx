@@ -120,12 +120,13 @@ class GameState extends State {
 	}
 
 	public function ballExplodes(a:ICollider, b:ICollider) {
+		var bullet:Bullet = cast a.userData;
+		bullet.die();
+		bullet.destroy();
 		var ball:Ball = cast b.userData;
 		var X:Float = ball.get_x();
 		var Y:Float = ball.get_y();
 		ball.explode();
-		var bullet:Bullet = cast a.userData;
-		bullet.die();
 		count++;
 		for (i in 0...2) {
 			var ball:Ball = new Ball(simulationLayer, smallsBallsColiision, X, Y, i);
@@ -134,11 +135,11 @@ class GameState extends State {
 	}
 
 	public function smallBallExplodes(a:ICollider, b:ICollider) {
-		var ball:Ball = cast b.userData;
-		ball.explode();
 		var bullet:Bullet = cast a.userData;
 		bullet.die();
-		++count;
+		var ball:Ball = cast b.userData;
+		ball.explode();
+		count++;
 		var ball:Ball = new Ball(simulationLayer, ballsColiision);
 		addChild(ball);
 	}
