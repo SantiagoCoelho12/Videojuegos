@@ -17,21 +17,28 @@ class Ball extends Entity {
 	var display:Sprite;
 	var collision:CollisionBox;
 	var collisionGroup:CollisionGroup;
-	var screenWidth:Int;
-	var screenHeight:Int;
+	var screenWidth:Int = 0;
+	var screenHeight:Int = 0;
 	var velocity:FastVector2;
-	var reverseBall:Bool;
+	var reverseBall:Bool = true;
+
+	public var recentlyExploted:Bool = true;
+
+	var timer:Float = 0;
+
+	private static inline var gravity:Float = 200;
 
 	public function new(layer:Layer, collisions:CollisionGroup, X:Float = 0, Y:Float = 0, i:Int = 0) {
 		super();
 		screenHeight = Screen.getHeight();
 		screenWidth = Screen.getWidth();
-		velocity = new FastVector2(130, 130);
+		velocity = new FastVector2(150, 150);
 		collisionGroup = collisions;
 		display = new Sprite("ball");
 		collision = new CollisionBox();
 		layer.addChild(display);
-		setCollisionsAnddisplay();
+		display.pivotX = display.width() / 2;
+		display.pivotY = display.height() / 2;
 		if (i == 1)
 			reverseBall = true;
 		else
@@ -39,15 +46,22 @@ class Ball extends Entity {
 		if (X != 0 && Y != 0) {
 			createSubBall(X, Y);
 		} else {
-			randomPos();
+			createBall();
 		}
 	}
 
 	override public function update(dt:Float):Void {
 		super.update(dt);
-		if (reverseBall) collision.x += velocity.x * dt * -1;
-	 	else collision.x += velocity.x * dt;
-	
+		timer += dt;
+		if (timer > 0.1)
+			recentlyExploted = false;
+		display.rotation += 0.020;
+		if (reverseBall)
+			collision.x += velocity.x * dt * -1;
+		else
+			collision.x += velocity.x * dt;
+
+		velocity.y += gravity * dt;
 		collision.y += velocity.y * dt;
 		if (collision.x < 0 || collision.x + RADIO > screenWidth) {
 			velocity.x *= -1;
@@ -72,32 +86,28 @@ class Ball extends Entity {
 		display.removeFromParent();
 	}
 
-	private inline function setCollisionsAnddisplay() {
+	private inline function createBall() {
+		collisionGroup.add(collision);
 		display.scaleX = display.scaleY = 0.5;
-		display.offsetX = -65;
-		display.offsetY = 0;
+		collision.x = (screenHeight) * Math.random();
+		collision.y = 0;
+		display.offsetX = -130;
+		display.offsetY = -65;
 		collision.width = (display.width() * 0.5) - 3;
 		collision.height = (display.height() * 0.5) - 3;
 		collision.userData = this;
 	}
 
 	private function createSubBall(X:Float, Y:Float) {
-		/*
-			collisionGroup.add(collision);
-			collision.x = X * side;
-			collision.y = Y;
-			display.scaleX = display.scaleY = 0.25;
-			collision.width = (display.width() * 0.25) - 3;
-			collision.height = (display.height() * 0.25) - 3;
-		 */
-		 
 		collisionGroup.add(collision);
+		display.scaleX = display.scaleY = 0.25;
 		collision.x = X;
 		collision.y = Y;
-		display.scaleX = display.scaleY = 0.25;
+		display.offsetX = -129;
+		display.offsetY = -95;
 		collision.width = (display.width() * 0.25);
 		collision.height = (display.height() * 0.25);
-		display.offsetX = -33;
+		collision.userData = this;
 	}
 
 	public function get_x():Float {
@@ -106,11 +116,5 @@ class Ball extends Entity {
 
 	public function get_y():Float {
 		return collision.y + collision.height * 0.5;
-	}
-
-	private function randomPos() {
-		collisionGroup.add(collision);
-		collision.x = (screenHeight)*Math.random();
-		collision.y = 0;
 	}
 }

@@ -14,19 +14,20 @@ import com.gEngine.display.Layer;
 import com.framework.utils.Entity;
 
 class Player extends Entity {
-	static inline var MAX_SPEED = 200;
+	var playerSpeed = 400;
 
 	public var gun:Gun;
 
-	var direction:FastVector2;
+	var direction:FastVector2 = new FastVector2(0, 0);
 	var display:Sprite;
-	var levitationArray:Array<Float> = [-0.1, 0, 0.1];
+	var levitationX:Float = 1;
+	var levitationY:Float = 1;
 
 	public var collision:CollisionBox;
-	public var x(get, null):Float;
-	public var y(get, null):Float;
-	public var width(get, null):Float;
-	public var height(get, null):Float;
+	public var x(get, null):Float = 0;
+	public var y(get, null):Float = 0;
+	public var width(get, null):Float = 0;
+	public var height(get, null):Float = 0;
 
 	public function new(X:Float = 0, Y:Float = 0, layer:Layer) {
 		super();
@@ -44,18 +45,29 @@ class Player extends Entity {
 		layer.addChild(display);
 		gun = new Gun();
 		addChild(gun);
+		display.rotation = 0;
 	}
 
 	override function update(dt:Float):Void {
 		super.update(dt);
 		collision.update(dt);
+		levitation();
 		if (collision.x > GEngine.i.width)
 			collision.x = -collision.width;
 		if (collision.x + collision.width < 0)
 			collision.x = GEngine.i.width;
 	}
 
-	inline function levitation() {}
+	inline function levitation() {
+		display.rotation += 0.002 * levitationX;
+		collision.y += 0.12 * levitationY;
+		if (display.rotation > 0.03 || display.rotation < -0.02) {
+			levitationX *= -1;
+		}
+		if (collision.y > 572 || collision.y < 566) {
+			levitationY *= -1;
+		}
+	}
 
 	override function render() {
 		display.x = collision.x + collision.width * 0.5;
@@ -135,7 +147,7 @@ class Player extends Entity {
 	public function onButtonChange(id:Int, value:Float) {
 		if (id == XboxJoystick.LEFT_DPAD) {
 			if (value == 1) {
-				collision.accelerationX = -MAX_SPEED * 4;
+				collision.accelerationX = -playerSpeed * 4;
 				display.scaleX = -Math.abs(display.scaleX);
 			} else {
 				if (collision.accelerationX < 0) {
@@ -145,7 +157,7 @@ class Player extends Entity {
 		}
 		if (id == XboxJoystick.RIGHT_DPAD) {
 			if (value == 1) {
-				collision.accelerationX = MAX_SPEED * 4;
+				collision.accelerationX = playerSpeed * 4;
 				display.scaleX = Math.abs(display.scaleX);
 			} else {
 				if (collision.accelerationX > 0) {
@@ -154,7 +166,7 @@ class Player extends Entity {
 			}
 		}
 		if (id == XboxJoystick.A && !Input.i.isKeyCodeReleased(Space)) {
-			gun.shoot(x + 23, y - 115, direction.x, -direction.y);
+			gun.shoot(x-3, y - 95, direction.x, -direction.y);
 		}
 	}
 
@@ -165,8 +177,8 @@ class Player extends Entity {
 		collision.height = display.height() * 0.8;
 		collision.x = X;
 		collision.y = Y;
-		collision.maxVelocityX = 500;
-		collision.dragX = 0.9;
+		collision.maxVelocityX = 700;
+		collision.dragX = 0.91;
 		collision.userData = this;
 	}
 

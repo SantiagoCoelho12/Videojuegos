@@ -30,7 +30,7 @@ class GameState extends State {
 	var screenHeight:Int;
 	var background:Sprite;
 	var ship:Player;
-	//var penguin:Player;
+	// var penguin:Player;
 	var simulationLayer:Layer;
 	var count:Int = 0;
 	var score:Text;
@@ -45,10 +45,10 @@ class GameState extends State {
 		var atlas:JoinAtlas = new JoinAtlas(2048, 2048);
 		atlas.add(new ImageLoader("background"));
 		atlas.add(new ImageLoader("ship"));
-		//atlas.add(new SparrowLoader("penguin", "penguin.xml"));
+		// atlas.add(new SparrowLoader("penguin", "penguin.xml"));
 		atlas.add(new ImageLoader("ball"));
 		atlas.add(new ImageLoader("bullet"));
-		atlas.add(new FontLoader(Assets.fonts.Kenney_ThickName,30));
+		atlas.add(new FontLoader(Assets.fonts.Kenney_ThickName, 30));
 		resources.add(atlas);
 	}
 
@@ -66,12 +66,12 @@ class GameState extends State {
 		GGD.simulationLayer = simulationLayer;
 		GGD.camera = stage.defaultCamera();
 
-		//penguin = new Player(1280/2, 720/2, simulationLayer);
-		//addChild(penguin);
+		// penguin = new Player(1280/2, 720/2, simulationLayer);
+		// addChild(penguin);
 
-		//GGD.player = penguin;
-		//GGD.simulationLayer = simulationLayer;
-		//GGD.camera = stage.defaultCamera();
+		// GGD.player = penguin;
+		// GGD.simulationLayer = simulationLayer;
+		// GGD.camera = stage.defaultCamera();
 
 		hudLayer = new StaticLayer();
 		stage.addChild(hudLayer);
@@ -79,8 +79,8 @@ class GameState extends State {
 		score.x = GEngine.virtualWidth / 2.5;
 		score.y = 30;
 		hudLayer.addChild(score);
-	//	score.text = "Puntaje: " + count;
-	//	GGD.camera.scale = 2;
+		//	score.text = "Puntaje: " + count;
+		//	GGD.camera.scale = 2;
 
 		var ball:Ball = new Ball(simulationLayer, ballsColiision);
 		addChild(ball);
@@ -93,7 +93,7 @@ class GameState extends State {
 		CollisionEngine.overlap(ship.collision, smallsBallsColiision, deathPlayer);
 		CollisionEngine.overlap(ship.gun.bulletsCollisions, ballsColiision, ballExplodes);
 		CollisionEngine.overlap(ship.gun.bulletsCollisions, smallsBallsColiision, smallBallExplodes);
-		score.text="Puntaje " + "    " + count +"";
+		score.text = "Puntaje " + "    " + count + "";
 		resetGame();
 	}
 
@@ -138,10 +138,12 @@ class GameState extends State {
 		var bullet:Bullet = cast a.userData;
 		bullet.die();
 		var ball:Ball = cast b.userData;
-		ball.explode();
-		count++;
-		var ball:Ball = new Ball(simulationLayer, ballsColiision);
-		addChild(ball);
+		if (!ball.recentlyExploted) {
+			ball.explode();
+			count++;
+			var ball:Ball = new Ball(simulationLayer, ballsColiision);
+			addChild(ball);
+		}
 	}
 
 	inline function resetGame() {

@@ -11,7 +11,7 @@ class Bullet extends Entity {
 	public var collision:CollisionBox;
 
 	var display:Sprite;
-	var counter:Float;
+	var counter:Float = 0;
 	static inline var MAX_COUNTER:Float = 6;
 	static inline var BALL_VELOCITY:Float = 700;
 
