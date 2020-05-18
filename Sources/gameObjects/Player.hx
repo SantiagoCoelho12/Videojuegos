@@ -58,7 +58,7 @@ class Player extends Entity {
 		if (display.rotation > 0.03 || display.rotation < -0.02) {
 			levitationX *= -1;
 		}
-		if (collision.y > (PLAYER_Y + 3) || collision.y < (PLAYER_Y - 4)) {
+		if (collision.y > ((Screen.getHeight() * PLAYER_Y) + 3) || collision.y < ((Screen.getHeight() * PLAYER_Y) - 4)) {
 			levitationY *= -1;
 		}
 	}

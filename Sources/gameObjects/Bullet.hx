@@ -37,11 +37,11 @@ class Bullet extends Entity {
 	}
 
 	override function update(dt:Float) {
+		super.update(dt);
 		autoDestroy(dt);
 		collision.update(dt);
 		display.x = collision.x;
 		display.y = collision.y;
-		super.update(dt);
 	}
 
 	inline function autoDestroy(dt:Float) {
