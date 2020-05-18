@@ -12,7 +12,8 @@ class Bullet extends Entity {
 
 	var display:Sprite;
 	var counter:Float = 0;
-	static inline var MAX_COUNTER:Float = 6;
+
+	static inline var MAX_COUNTER:Float = 2;
 	static inline var BALL_VELOCITY:Float = 700;
 
 	public function new() {
@@ -25,8 +26,7 @@ class Bullet extends Entity {
 
 		collision.userData = this;
 
-		display.scaleX = 1;
-		display.scaleY = 1;
+		display.scaleX = display.scaleY = 1;
 		display.offsetX = -4;
 		display.offsetY = -10;
 	}
@@ -37,17 +37,19 @@ class Bullet extends Entity {
 	}
 
 	override function update(dt:Float) {
-		counter += dt;
-		if (counter > MAX_COUNTER){
-			die();
-			limboStart();
-		}
-			
+		autoDestroy(dt);
 		collision.update(dt);
 		display.x = collision.x;
 		display.y = collision.y;
-
 		super.update(dt);
+	}
+
+	inline function autoDestroy(dt:Float) {
+		counter += dt;
+		if (counter > MAX_COUNTER) {
+			die();
+			limboStart();
+		}
 	}
 
 	public function shoot(x:Float, y:Float, dirX:Float, dirY:Float, bulletsCollision:CollisionGroup):Void {

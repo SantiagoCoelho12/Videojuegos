@@ -1,5 +1,6 @@
 package gameObjects;
 
+import com.gEngine.helper.Screen;
 import js.html.TimeElement;
 import com.gEngine.helper.Timeline;
 import com.gEngine.GEngine;
@@ -14,9 +15,8 @@ import com.gEngine.display.Layer;
 import com.framework.utils.Entity;
 
 class Player extends Entity {
-	var playerSpeed = 400;
-
-	public var gun:Gun;
+	public static var PLAYER_Y = 0.80;
+	static var PLAYER_SPEED = 400;
 
 	var direction:FastVector2 = new FastVector2(0, 0);
 	var display:Sprite;
@@ -28,19 +28,18 @@ class Player extends Entity {
 	public var y(get, null):Float = 0;
 	public var width(get, null):Float = 0;
 	public var height(get, null):Float = 0;
+	public var gun:Gun;
 
 	public function new(X:Float = 0, Y:Float = 0, layer:Layer) {
 		super();
 		direction = new FastVector2(0, 1);
 		display = new Sprite("ship");
-
 		collision = new CollisionBox();
+		gun = new Gun();
 		setCollisions(X, Y);
 		setDisplay();
 		layer.addChild(display);
-		gun = new Gun();
 		addChild(gun);
-		display.rotation = 0;
 	}
 
 	override function update(dt:Float):Void {
@@ -59,7 +58,7 @@ class Player extends Entity {
 		if (display.rotation > 0.03 || display.rotation < -0.02) {
 			levitationX *= -1;
 		}
-		if (collision.y > 572 || collision.y < 566) {
+		if (collision.y > (PLAYER_Y + 3) || collision.y < (PLAYER_Y - 4)) {
 			levitationY *= -1;
 		}
 	}
@@ -88,7 +87,7 @@ class Player extends Entity {
 	public function onButtonChange(id:Int, value:Float) {
 		if (id == XboxJoystick.LEFT_DPAD) {
 			if (value == 1) {
-				collision.accelerationX = -playerSpeed * 4;
+				collision.accelerationX = -PLAYER_SPEED * 4;
 				display.scaleX = -Math.abs(display.scaleX);
 			} else {
 				if (collision.accelerationX < 0) {
@@ -98,7 +97,7 @@ class Player extends Entity {
 		}
 		if (id == XboxJoystick.RIGHT_DPAD) {
 			if (value == 1) {
-				collision.accelerationX = playerSpeed * 4;
+				collision.accelerationX = PLAYER_SPEED * 4;
 				display.scaleX = Math.abs(display.scaleX);
 			} else {
 				if (collision.accelerationX > 0) {
@@ -107,7 +106,7 @@ class Player extends Entity {
 			}
 		}
 		if (id == XboxJoystick.A && !Input.i.isKeyCodeReleased(Space)) {
-			gun.shoot(x-3, y - 95, direction.x, -direction.y);
+			gun.shoot(x - 3, y - 95, direction.x, -direction.y);
 		}
 	}
 

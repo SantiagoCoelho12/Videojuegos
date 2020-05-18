@@ -5,7 +5,6 @@ import gameObjects.Player;
 import com.gEngine.display.Sprite;
 import kha.Color;
 import com.loading.basicResources.JoinAtlas;
-import com.gEngine.display.StaticLayer;
 import com.gEngine.GEngine;
 import com.gEngine.display.Text;
 import kha.Assets;
@@ -13,7 +12,6 @@ import com.loading.basicResources.FontLoader;
 import com.gEngine.display.Layer;
 import kha.input.KeyCode;
 import com.framework.utils.Input;
-import kha.math.FastVector2;
 import com.loading.basicResources.ImageLoader;
 import com.loading.Resources;
 import com.framework.utils.State;
@@ -37,19 +35,30 @@ class GameOver extends State {
 	}
 
 	override function init() {
+		gameOverImg();
+		scoreText();
+		resetText();
+	}
+
+	inline function gameOverImg() {
 		var image = new Sprite("gameOver");
 		image.x = GEngine.virtualWidth * 0.5 - image.width() * 0.5;
 		image.y = 100;
 		image.scaleX = image.scaleY = 1.5;
 		image.offsetX = -100;
 		stage.addChild(image);
+	}
+
+	inline function scoreText() {
 		var textScore = new Text(Assets.fonts.GalaxyName);
 		textScore.text = "Tu puntaje es " + score;
 		textScore.x = GEngine.virtualWidth / 2 - textScore.width() * 0.63;
 		textScore.y = GEngine.virtualHeight * 0.46;
 		textScore.color = Color.fromBytes(128, 61, 117);
 		stage.addChild(textScore);
+	}
 
+	inline function resetText() {
 		var replay = new Text(Assets.fonts.GalaxyName);
 		replay.x = GEngine.virtualWidth * 0.22;
 		replay.y = GEngine.virtualHeight * 0.52;

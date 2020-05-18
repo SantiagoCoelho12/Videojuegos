@@ -1,11 +1,10 @@
 package states;
 
-import paths.ComplexPath;
-import paths.BezierPath;
+import com.gEngine.helper.Screen;
+import js.lib.Math;
 import kha.math.FastVector2;
 import paths.LinearPath;
 import paths.Path;
-import com.gEngine.helper.RectangleDisplay;
 import com.loading.basicResources.SparrowLoader;
 import com.loading.basicResources.FontLoader;
 import kha.Assets;
@@ -32,6 +31,8 @@ import gameObjects.Player;
 import gameObjects.Ball;
 
 class GameState extends State {
+	static var ASTEROID_CYCLE:Float = 11;
+
 	var screenWidth:Int;
 	var screenHeight:Int;
 	var background:Sprite;
@@ -44,9 +45,10 @@ class GameState extends State {
 	var ballsColiision:CollisionGroup;
 	var smallsBallsColiision:CollisionGroup;
 	var hudLayer:StaticLayer;
-	var time:Float = 0;
-	var totalTime:Float = 11;
+	var asteroidTime:Float = 0;
 	var asteroid:Sprite;
+	var asteroidLevitation:Float = 0.8;
+	var asteroidLevitationTimer:Float = 0;
 
 	override function load(resources:Resources) {
 		screenWidth = GEngine.i.width;
@@ -66,31 +68,14 @@ class GameState extends State {
 		ballsColiision = new CollisionGroup();
 		smallsBallsColiision = new CollisionGroup();
 		simulationLayer = new Layer();
+		hudLayer = new StaticLayer();
 		stage.addChild(simulationLayer);
-
-		ship = new Player(1024 / 2, 570, simulationLayer);
-		addChild(ship);
-
-		GGD.player = ship;
+		createShip();
 		GGD.simulationLayer = simulationLayer;
 		GGD.camera = stage.defaultCamera();
-
-		hudLayer = new StaticLayer();
-		stage.addChild(hudLayer);
-		score = new Text(Assets.fonts.GalaxyName);
-		score.x = GEngine.virtualWidth / 2.5;
-		score.y = 30;
-		var info =  new Text(Assets.fonts.GalaxyName);
-		info.x = GEngine.virtualWidth * 0.33;
-		info.y = 70;
-		info.text = "Espacio para disparar";
-		hudLayer.addChild(info);
-		hudLayer.addChild(score);
-		var ball:Ball = new Ball(simulationLayer, ballsColiision);
-		addChild(ball);
+		setHUD();
+		createFirstBall();
 		createTouchJoystick();
-
-	
 	}
 
 	override function update(dt:Float) {
@@ -101,20 +86,51 @@ class GameState extends State {
 		CollisionEngine.overlap(ship.gun.bulletsCollisions, smallsBallsColiision, smallBallExplodes);
 		score.text = "Puntaje " + "  " + count;
 		resetGame();
+		asteroidCycle(dt);
+	}
 
-		time += dt;
-		if (time > totalTime) {
-			time = 0;
+	inline function asteroidCycle(dt:Float) {
+		asteroidTime += dt;
+		asteroidLevitationTimer += dt;
+		if (asteroidTime > ASTEROID_CYCLE) {
+			asteroidTime = 0;
 		}
-		var s:Float = time / totalTime;
-
+		var s:Float = asteroidTime / ASTEROID_CYCLE;
 		var position = path.getPos(s);
 		asteroid.x = position.x;
-		asteroid.y = position.y;
+		asteroid.y = position.y + asteroidLevitation;
+		if (asteroidLevitationTimer > 0.5) {
+			asteroidLevitation *= -1;
+			asteroidLevitationTimer = 0;
+		}
 	}
 
 	override function render() {
 		super.render();
+	}
+
+	inline function createFirstBall() {
+		var ball:Ball = new Ball(simulationLayer, ballsColiision);
+		addChild(ball);
+	}
+
+	inline function setHUD() {
+		stage.addChild(hudLayer);
+		score = new Text(Assets.fonts.GalaxyName);
+		score.x = GEngine.virtualWidth / 2.5;
+		score.y = 30;
+		var info = new Text(Assets.fonts.GalaxyName);
+		info.x = GEngine.virtualWidth * 0.33;
+		info.y = 70;
+		info.text = "Espacio para disparar";
+		hudLayer.addChild(info);
+		hudLayer.addChild(score);
+	}
+
+	inline function createShip() {
+		ship = new Player(Screen.getWidth() * Math.random(), Screen.getHeight() * Player.PLAYER_Y, simulationLayer);
+		addChild(ship);
+		GGD.player = ship;
 	}
 
 	inline function loadBackground() {
@@ -158,7 +174,7 @@ class GameState extends State {
 		var bullet:Bullet = cast a.userData;
 		bullet.die();
 		var ball:Ball = cast b.userData;
-		if (!ball.recentlyExploted) {
+		if (!ball.recentlyExploded) {
 			ball.explode();
 			count++;
 			var ball:Ball = new Ball(simulationLayer, ballsColiision);
@@ -175,11 +191,12 @@ class GameState extends State {
 	public function deathPlayer(a:ICollider, b:ICollider) {
 		changeState(new GameOver(count));
 	}
-	/*#if DEBUGDRAW
-		override function draw(framebuffer:kha.Canvas) {
-			super.draw(framebuffer);
-			var camera = stage.defaultCamera();
-			CollisionEngine.renderDebug(framebuffer, camera);
-		}
-		#end */
+
+	#if DEBUGDRAW
+	override function draw(framebuffer:kha.Canvas) {
+		super.draw(framebuffer);
+		var camera = stage.defaultCamera();
+		CollisionEngine.renderDebug(framebuffer, camera);
+	}
+	#end
 }

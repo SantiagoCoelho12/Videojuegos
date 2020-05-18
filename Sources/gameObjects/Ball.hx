@@ -11,9 +11,11 @@ import com.framework.utils.Entity;
 import GlobalGameData.GGD;
 
 class Ball extends Entity {
-	private static inline var GROUND_LIMIT = 80;
+	private static inline var GROUND_LIMIT = 0.90;
+	private static inline var GRAVITY:Float = 150;
 
-	var radio = 0;
+	public var recentlyExploded:Bool = true;
+
 	var display:Sprite;
 	var collision:CollisionBox;
 	var collisionGroup:CollisionGroup;
@@ -22,12 +24,8 @@ class Ball extends Entity {
 	var velocity:FastVector2;
 	var reverseBall:Bool = true;
 	var rotationMovement:Float = 1;
-
-	public var recentlyExploted:Bool = true;
-
 	var timer:Float = 0;
-
-	private static inline var gravity:Float = 150;
+	var radio = 0;
 
 	public function new(layer:Layer, collisions:CollisionGroup, X:Float = 0, Y:Float = 0, i:Int = 0) {
 		super();
@@ -40,39 +38,17 @@ class Ball extends Entity {
 		layer.addChild(display);
 		display.pivotX = display.width() / 2;
 		display.pivotY = display.height() / 2;
-		if (i == 1)
-			reverseBall = true;
-		else
-			reverseBall = false;
-		if (X != 0 && Y != 0) {
-			createSubBall(X, Y);
-		} else {
-			createBall();
-		}
+		reverseBall = i == 1;
+		createBall(X, Y);
 	}
 
 	override public function update(dt:Float):Void {
 		super.update(dt);
-		timer += dt;
-		if (timer > 0.1)
-			recentlyExploted = false;
+		setRecentlyExplode(dt);
 		display.rotation += 0.020 * rotationMovement;
-		if (reverseBall)
-			collision.x += velocity.x * dt * -1;
-		else
-			collision.x += velocity.x * dt;
-
-		velocity.y += gravity * dt;
-		collision.y += velocity.y * dt;
-		if (collision.x < 0 || collision.x + radio > screenWidth) {
-			velocity.x *= -1;
-			rotationMovement *= -1;
-		}
-
-		if (collision.y + radio > screenHeight - GROUND_LIMIT || collision.y < 0) {
-			velocity.y *= -1;
-		}
-
+		setBallDirection(dt);
+		ballMovement(dt);
+		bordersControl();
 		collision.update(dt);
 	}
 
@@ -88,7 +64,51 @@ class Ball extends Entity {
 		display.removeFromParent();
 	}
 
-	private inline function createBall() {
+	public function get_x():Float {
+		return collision.x + collision.width * 0.5;
+	}
+
+	public function get_y():Float {
+		return collision.y + collision.height * 0.5;
+	}
+
+	inline function ballMovement(dt:Float) {
+		velocity.y += GRAVITY * dt;
+		collision.y += velocity.y * dt;
+	}
+
+	inline function bordersControl() {
+		if (collision.x < 0 || collision.x + radio > screenWidth) {
+			velocity.x *= -1;
+			rotationMovement *= -1;
+		}
+
+		if (collision.y + radio > (screenHeight * GROUND_LIMIT) || collision.y < 0) {
+			velocity.y *= -1;
+		}
+	}
+
+	inline function setRecentlyExplode(dt:Float) {
+		timer += dt;
+		if (timer > 0.1)
+			recentlyExploded = false;
+	}
+
+	inline function setBallDirection(dt:Float) {
+		if (reverseBall)
+			collision.x += velocity.x * dt * -1;
+		else
+			collision.x += velocity.x * dt;
+	}
+
+	inline function createBall(X:Float, Y:Float) {
+		if (X != 0 && Y != 0)
+			createSubBall(X, Y);
+		else
+			createBigBall();
+	}
+
+	private inline function createBigBall() {
 		collisionGroup.add(collision);
 		radio = 120;
 		display.scaleX = display.scaleY = 0.5;
@@ -96,7 +116,7 @@ class Ball extends Entity {
 		collision.y = 0;
 		display.offsetX = -130;
 		display.offsetY = -65;
-		collision.width = (display.width() * 0.5) - 15;
+		collision.width = (display.width() * 0.5) - 17;
 		collision.height = (display.height() * 0.5) - 15;
 		collision.userData = this;
 	}
@@ -109,16 +129,8 @@ class Ball extends Entity {
 		collision.y = Y;
 		display.offsetX = -129;
 		display.offsetY = -95;
-		collision.width = (display.width() * 0.25)-10;
-		collision.height = (display.height() * 0.25)-10;
+		collision.width = (display.width() * 0.25) - 12;
+		collision.height = (display.height() * 0.25) - 10;
 		collision.userData = this;
-	}
-
-	public function get_x():Float {
-		return collision.x + collision.width * 0.5;
-	}
-
-	public function get_y():Float {
-		return collision.y + collision.height * 0.5;
 	}
 }
