@@ -173,7 +173,6 @@ class GameState extends State {
 	}
 
 	public function deathPlayer(a:ICollider, b:ICollider) {
-		GGD.destroy();
 		changeState(new GameOver(count));
 	}
 	/*#if DEBUGDRAW

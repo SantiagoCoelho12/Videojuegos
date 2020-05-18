@@ -56,7 +56,6 @@ class GameOver extends State {
 		replay.color = Color.fromBytes(128, 61, 117);
 		replay.text = "Presione enter para jugar otra vez";
 		stage.addChild(replay);
-		GGD.destroy();
 	}
 
 	override function update(dt:Float) {
