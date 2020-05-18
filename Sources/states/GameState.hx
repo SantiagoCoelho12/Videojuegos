@@ -1,5 +1,11 @@
 package states;
 
+import paths.ComplexPath;
+import paths.BezierPath;
+import kha.math.FastVector2;
+import paths.LinearPath;
+import paths.Path;
+import com.gEngine.helper.RectangleDisplay;
 import com.loading.basicResources.SparrowLoader;
 import com.loading.basicResources.FontLoader;
 import kha.Assets;
@@ -30,6 +36,7 @@ class GameState extends State {
 	var screenHeight:Int;
 	var background:Sprite;
 	var ship:Player;
+	var path:Path;
 	var simulationLayer:Layer;
 	var count:Int = 0;
 	var score:Text;
@@ -37,6 +44,9 @@ class GameState extends State {
 	var ballsColiision:CollisionGroup;
 	var smallsBallsColiision:CollisionGroup;
 	var hudLayer:StaticLayer;
+	var time:Float = 0;
+	var totalTime:Float = 11;
+	var asteroid:Sprite;
 
 	override function load(resources:Resources) {
 		screenWidth = GEngine.i.width;
@@ -47,6 +57,7 @@ class GameState extends State {
 		atlas.add(new ImageLoader("ball"));
 		atlas.add(new ImageLoader("bullet"));
 		atlas.add(new FontLoader(Assets.fonts.GalaxyName, 27));
+		atlas.add(new ImageLoader("asteroid"));
 		resources.add(atlas);
 	}
 
@@ -78,6 +89,8 @@ class GameState extends State {
 		var ball:Ball = new Ball(simulationLayer, ballsColiision);
 		addChild(ball);
 		createTouchJoystick();
+
+	
 	}
 
 	override function update(dt:Float) {
@@ -88,6 +101,16 @@ class GameState extends State {
 		CollisionEngine.overlap(ship.gun.bulletsCollisions, smallsBallsColiision, smallBallExplodes);
 		score.text = "Puntaje " + "  " + count;
 		resetGame();
+
+		time += dt;
+		if (time > totalTime) {
+			time = 0;
+		}
+		var s:Float = time / totalTime;
+
+		var position = path.getPos(s);
+		asteroid.x = position.x;
+		asteroid.y = position.y;
 	}
 
 	override function render() {
@@ -98,6 +121,10 @@ class GameState extends State {
 		var backgraundLayer = new Layer();
 		background = new Sprite("background");
 		backgraundLayer.addChild(background);
+		asteroid = new Sprite("asteroid");
+		asteroid.scaleX = asteroid.scaleY = 0.30;
+		backgraundLayer.addChild(asteroid);
+		path = new LinearPath(new FastVector2(530, -150), new FastVector2(-600, 800));
 		stage.addChild(backgraundLayer);
 	}
 
@@ -146,14 +173,14 @@ class GameState extends State {
 	}
 
 	public function deathPlayer(a:ICollider, b:ICollider) {
+		GGD.destroy();
 		changeState(new GameOver(count));
 	}
-
 	/*#if DEBUGDRAW
-	override function draw(framebuffer:kha.Canvas) {
-		super.draw(framebuffer);
-		var camera = stage.defaultCamera();
-		CollisionEngine.renderDebug(framebuffer, camera);
-	}
-	#end*/
+		override function draw(framebuffer:kha.Canvas) {
+			super.draw(framebuffer);
+			var camera = stage.defaultCamera();
+			CollisionEngine.renderDebug(framebuffer, camera);
+		}
+		#end */
 }
