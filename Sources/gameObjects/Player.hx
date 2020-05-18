@@ -33,11 +33,6 @@ class Player extends Entity {
 		super();
 		direction = new FastVector2(0, 1);
 		display = new Sprite("ship");
-		// display = new Sprite("penguin");
-		// display.timeline.playAnimation("penguin");
-		// display.timeline.frameRate = 1 / 10;
-		// display.offsetX = -15;
-		// display.offsetY = -10;
 
 		collision = new CollisionBox();
 		setCollisions(X, Y);
@@ -73,60 +68,6 @@ class Player extends Entity {
 		display.x = collision.x + collision.width * 0.5;
 		display.y = collision.y;
 	}
-
-	// override function render() {
-	// 	if (notWalking()) {
-	// 		if (direction.x == 0) { // estoy mirand up o down
-	// 			if (direction.y > 0) {
-	// 				display.timeline.playAnimation("penguin16.png");
-	// 			} else {
-	// 				display.timeline.playAnimation("penguin29.png");
-	// 			}
-	// 		} else {
-	// 			display.timeline.playAnimation("penguin10.png");
-	// 			if (direction.x > 0) {
-	// 				display.scaleX = 1;
-	// 			} else {
-	// 				display.scaleX = -1;
-	// 			}
-	// 		}
-	// 	} else {
-	// 		if (walking45()) {
-	// 			if (direction.x > 0) {
-	// 				display.scaleX = 1;
-	// 			} else {
-	// 				display.scaleX = -1;
-	// 			}
-	// 			if (direction.y > 0) {
-	// 				display.timeline.playAnimation("penguin20.png");
-	// 			} else {
-	// 				display.timeline.playAnimation("penguin10.png");
-	// 			}
-	// 		} else {
-	// 			if (direction.x == 0) { // estoy mirand up o down
-	// 				if (direction.y > 0) {
-	// 					display.timeline.playAnimation("penguin3.png");
-	// 				} else {
-	// 					display.timeline.playAnimation("penguin1.png");
-	// 				}
-	// 			} else {
-	// 				display.timeline.playAnimation("penguin10.png");
-	// 				if (direction.x > 0) {
-	// 					display.scaleX = 1;
-	// 				} else {
-	// 					display.scaleX = -1;
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// 	super.render();
-	// }
-	// inline function walking45() {
-	// 	return direction.x != 0 && direction.y != 0;
-	// }
-	// inline function notWalking() {
-	// 	return collision.velocityX == 0 && collision.velocityY == 0;
-	// }
 
 	public function get_x():Float {
 		return collision.x + collision.width * 0.5;

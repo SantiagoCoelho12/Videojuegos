@@ -30,7 +30,6 @@ class GameState extends State {
 	var screenHeight:Int;
 	var background:Sprite;
 	var ship:Player;
-	// var penguin:Player;
 	var simulationLayer:Layer;
 	var count:Int = 0;
 	var score:Text;
@@ -45,10 +44,9 @@ class GameState extends State {
 		var atlas:JoinAtlas = new JoinAtlas(2048, 2048);
 		atlas.add(new ImageLoader("background"));
 		atlas.add(new ImageLoader("ship"));
-		// atlas.add(new SparrowLoader("penguin", "penguin.xml"));
 		atlas.add(new ImageLoader("ball"));
 		atlas.add(new ImageLoader("bullet"));
-		atlas.add(new FontLoader(Assets.fonts.Kenney_ThickName, 20));
+		atlas.add(new FontLoader(Assets.fonts.GalaxyName, 27));
 		resources.add(atlas);
 	}
 
@@ -68,10 +66,10 @@ class GameState extends State {
 
 		hudLayer = new StaticLayer();
 		stage.addChild(hudLayer);
-		score = new Text(Assets.fonts.Kenney_ThickName);
+		score = new Text(Assets.fonts.GalaxyName);
 		score.x = GEngine.virtualWidth / 2.5;
 		score.y = 30;
-		var info =  new Text(Assets.fonts.Kenney_ThickName);
+		var info =  new Text(Assets.fonts.GalaxyName);
 		info.x = GEngine.virtualWidth * 0.33;
 		info.y = 70;
 		info.text = "Espacio para disparar";
