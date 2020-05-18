@@ -32,7 +32,7 @@ class GameOver extends State {
 	override function load(resources:Resources) {
 		var atlas:JoinAtlas = new JoinAtlas(2048, 2048);
 		atlas.add(new ImageLoader("gameOver"));
-		atlas.add(new FontLoader(Assets.fonts.Kenney_ThickName,30));
+		atlas.add(new FontLoader(Assets.fonts.Kenney_ThickName, 25));
 		resources.add(atlas);
 	}
 
@@ -42,14 +42,20 @@ class GameOver extends State {
 		image.y = 100;
 		image.scaleX = image.scaleY = 1.5;
 		image.offsetX = -100;
-		// image.offsetY = 100;
 		stage.addChild(image);
 		var textScore = new Text(Assets.fonts.Kenney_ThickName);
-		textScore.text = "Tu puntaje es "+score;
-		textScore.x = GEngine.virtualWidth / 2 - textScore.width() * 0.5;
-		textScore.y = GEngine.virtualHeight / 2;
-		textScore.color = Color.Purple;
+		textScore.text = "Tu puntaje es " + score;
+		textScore.x = GEngine.virtualWidth / 2 - textScore.width() * 0.63;
+		textScore.y = GEngine.virtualHeight * 0.46;
+		textScore.color = Color.fromBytes(128, 61, 117);
 		stage.addChild(textScore);
+
+		var replay = new Text(Assets.fonts.Kenney_ThickName);
+		replay.x = GEngine.virtualWidth * 0.22;
+		replay.y = GEngine.virtualHeight * 0.52;
+		replay.color = Color.fromBytes(128, 61, 117);
+		replay.text = "Presione enter para jugar otra vez";
+		stage.addChild(replay);
 		GGD.destroy();
 	}
 

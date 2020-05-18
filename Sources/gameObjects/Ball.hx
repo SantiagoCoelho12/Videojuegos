@@ -11,9 +11,9 @@ import com.framework.utils.Entity;
 import GlobalGameData.GGD;
 
 class Ball extends Entity {
-	private static inline var RADIO = 120;
 	private static inline var GROUND_LIMIT = 80;
 
+	var radio = 0;
 	var display:Sprite;
 	var collision:CollisionBox;
 	var collisionGroup:CollisionGroup;
@@ -21,12 +21,13 @@ class Ball extends Entity {
 	var screenHeight:Int = 0;
 	var velocity:FastVector2;
 	var reverseBall:Bool = true;
+	var rotationMovement:Float = 1;
 
 	public var recentlyExploted:Bool = true;
 
 	var timer:Float = 0;
 
-	private static inline var gravity:Float = 200;
+	private static inline var gravity:Float = 150;
 
 	public function new(layer:Layer, collisions:CollisionGroup, X:Float = 0, Y:Float = 0, i:Int = 0) {
 		super();
@@ -55,7 +56,7 @@ class Ball extends Entity {
 		timer += dt;
 		if (timer > 0.1)
 			recentlyExploted = false;
-		display.rotation += 0.020;
+		display.rotation += 0.020 * rotationMovement;
 		if (reverseBall)
 			collision.x += velocity.x * dt * -1;
 		else
@@ -63,11 +64,12 @@ class Ball extends Entity {
 
 		velocity.y += gravity * dt;
 		collision.y += velocity.y * dt;
-		if (collision.x < 0 || collision.x + RADIO > screenWidth) {
+		if (collision.x < 0 || collision.x + radio > screenWidth) {
 			velocity.x *= -1;
+			rotationMovement *= -1;
 		}
 
-		if (collision.y + RADIO > screenHeight - GROUND_LIMIT || collision.y < 0) {
+		if (collision.y + radio > screenHeight - GROUND_LIMIT || collision.y < 0) {
 			velocity.y *= -1;
 		}
 
@@ -88,25 +90,27 @@ class Ball extends Entity {
 
 	private inline function createBall() {
 		collisionGroup.add(collision);
+		radio = 120;
 		display.scaleX = display.scaleY = 0.5;
 		collision.x = (screenHeight) * Math.random();
 		collision.y = 0;
 		display.offsetX = -130;
 		display.offsetY = -65;
-		collision.width = (display.width() * 0.5) - 3;
-		collision.height = (display.height() * 0.5) - 3;
+		collision.width = (display.width() * 0.5) - 15;
+		collision.height = (display.height() * 0.5) - 15;
 		collision.userData = this;
 	}
 
 	private function createSubBall(X:Float, Y:Float) {
 		collisionGroup.add(collision);
+		radio = 60;
 		display.scaleX = display.scaleY = 0.25;
 		collision.x = X;
 		collision.y = Y;
 		display.offsetX = -129;
 		display.offsetY = -95;
-		collision.width = (display.width() * 0.25);
-		collision.height = (display.height() * 0.25);
+		collision.width = (display.width() * 0.25)-10;
+		collision.height = (display.height() * 0.25)-10;
 		collision.userData = this;
 	}
 

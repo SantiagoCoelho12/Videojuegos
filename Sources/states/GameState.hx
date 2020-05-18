@@ -48,7 +48,7 @@ class GameState extends State {
 		// atlas.add(new SparrowLoader("penguin", "penguin.xml"));
 		atlas.add(new ImageLoader("ball"));
 		atlas.add(new ImageLoader("bullet"));
-		atlas.add(new FontLoader(Assets.fonts.Kenney_ThickName, 30));
+		atlas.add(new FontLoader(Assets.fonts.Kenney_ThickName, 20));
 		resources.add(atlas);
 	}
 
@@ -66,22 +66,17 @@ class GameState extends State {
 		GGD.simulationLayer = simulationLayer;
 		GGD.camera = stage.defaultCamera();
 
-		// penguin = new Player(1280/2, 720/2, simulationLayer);
-		// addChild(penguin);
-
-		// GGD.player = penguin;
-		// GGD.simulationLayer = simulationLayer;
-		// GGD.camera = stage.defaultCamera();
-
 		hudLayer = new StaticLayer();
 		stage.addChild(hudLayer);
 		score = new Text(Assets.fonts.Kenney_ThickName);
 		score.x = GEngine.virtualWidth / 2.5;
 		score.y = 30;
+		var info =  new Text(Assets.fonts.Kenney_ThickName);
+		info.x = GEngine.virtualWidth * 0.33;
+		info.y = 70;
+		info.text = "Espacio para disparar";
+		hudLayer.addChild(info);
 		hudLayer.addChild(score);
-		//	score.text = "Puntaje: " + count;
-		//	GGD.camera.scale = 2;
-
 		var ball:Ball = new Ball(simulationLayer, ballsColiision);
 		addChild(ball);
 		createTouchJoystick();
@@ -93,7 +88,7 @@ class GameState extends State {
 		CollisionEngine.overlap(ship.collision, smallsBallsColiision, deathPlayer);
 		CollisionEngine.overlap(ship.gun.bulletsCollisions, ballsColiision, ballExplodes);
 		CollisionEngine.overlap(ship.gun.bulletsCollisions, smallsBallsColiision, smallBallExplodes);
-		score.text = "Puntaje " + "    " + count + "";
+		score.text = "Puntaje " + "  " + count;
 		resetGame();
 	}
 
@@ -156,11 +151,11 @@ class GameState extends State {
 		changeState(new GameOver(count));
 	}
 
-	#if DEBUGDRAW
+	/*#if DEBUGDRAW
 	override function draw(framebuffer:kha.Canvas) {
 		super.draw(framebuffer);
 		var camera = stage.defaultCamera();
 		CollisionEngine.renderDebug(framebuffer, camera);
 	}
-	#end
+	#end*/
 }
