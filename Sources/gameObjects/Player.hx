@@ -19,6 +19,8 @@ class Player extends Entity {
 	var display:Sprite;
 	var levitationX:Float = 1;
 	var levitationY:Float = 1;
+	var explosion:Sprite;
+	var currentLayer:Layer;
 
 	public var collision:CollisionBox;
 	public var x(get, null):Float = 0;
@@ -32,6 +34,7 @@ class Player extends Entity {
 		direction = new FastVector2(0, 1);
 		display = new Sprite("ship");
 		collision = new CollisionBox();
+		currentLayer = layer;
 		gun = new Gun();
 		setCollisions(X, Y);
 		setDisplay();
@@ -43,10 +46,17 @@ class Player extends Entity {
 		super.update(dt);
 		collision.update(dt);
 		levitation();
+		deathAnimation(dt);
 		if (collision.x > GEngine.i.width)
 			collision.x = -collision.width;
 		if (collision.x + collision.width < 0)
 			collision.x = GEngine.i.width;
+	}
+
+	inline function deathAnimation(dt:Float) {
+		if(this.isDead()){
+			explosion.y += 60*dt;
+		}
 	}
 
 	inline function levitation() {
@@ -125,4 +135,31 @@ class Player extends Entity {
 		display.pivotX = display.width() * 0.5;
 		display.pivotY = display.height();
 	};
+
+	public function explode() {
+		explosion = new Sprite("shipexplosion");
+		explosion.x = display.x;
+		explosion.y = display.y;
+		explosion.timeline.playAnimation("explode", false);
+		display.y = -1000;
+		display.x = -1000;
+	}
+
+	public override function die() {
+		super.die();
+		explosion = new Sprite("shipexplosion");
+		explosion.x = display.x;
+		explosion.y = display.y;
+		explosion.scaleX = explosion.scaleY = 0.7;
+		explosion.offsetX = -70;
+		explosion.offsetY = -20;
+		explosion.timeline.playAnimation("explode", false);
+		display.y = -1000;
+		display.x = -1000;
+		currentLayer.addChild(explosion);
+	}
+
+	public function deathComplete():Bool {
+		return !explosion.timeline.playing;
+	}
 }
