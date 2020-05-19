@@ -1,5 +1,9 @@
 package gameObjects;
 
+import kha.audio1.Audio;
+import kha.Assets;
+import kha.Sound;
+import kha.audio1.AudioChannel;
 import js.lib.Math;
 import com.gEngine.helper.Screen;
 import kha.math.FastVector2;
@@ -26,6 +30,8 @@ class Ball extends Entity {
 	var timer:Float = 0;
 	var radio = 0;
 	var animation:Sprite;
+	var explosionChannel:AudioChannel;
+	var explosionPlayers:Sound;
 
 	public function new(layer:Layer, collisions:CollisionGroup, X:Float = 0, Y:Float = 0, i:Int = 0) {
 		super();
@@ -65,6 +71,7 @@ class Ball extends Entity {
 		animation.x = display.x;
 		animation.y = display.y;
 		animation.timeline.playAnimation("explode", false);
+		explosionChannel = Audio.play(Assets.sounds.explosionPlayers);
 		collision.removeFromParent();
 		collisionGroup.remove(collision);
 		display.removeFromParent();
