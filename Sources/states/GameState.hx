@@ -58,8 +58,12 @@ class GameState extends State {
 		atlas.add(new ImageLoader("ball"));
 		atlas.add(new ImageLoader("bullet"));
 		atlas.add(new ImageLoader("asteroid"));
-		atlas.add(new SpriteSheetLoader("explosion",51,64,0,[Sequence.at("ball",0,0),Sequence.at("explode",1,19),Sequence.at("sleep",19,19)]));
-		atlas.add(new SpriteSheetLoader("shipexplosion",255,240,0,[Sequence.at("explode",0,21)]));
+		atlas.add(new SpriteSheetLoader("explosion", 51, 64, 0, [
+			Sequence.at("ball", 0, 0),
+			Sequence.at("explode", 1, 19),
+			Sequence.at("sleep", 19, 19)
+		]));
+		atlas.add(new SpriteSheetLoader("shipexplosion", 255, 240, 0, [Sequence.at("explode", 0, 21)]));
 		atlas.add(new FontLoader(Assets.fonts.GalaxyName, 27));
 		resources.add(atlas);
 	}
@@ -80,7 +84,8 @@ class GameState extends State {
 	}
 
 	override function update(dt:Float) {
-		if(ship.isDead() && ship.deathComplete()) changeState(new GameOver(count));
+		if (ship.isDead() && ship.deathComplete())
+			changeState(new GameOver(count));
 		super.update(dt);
 		CollisionEngine.overlap(ship.collision, ballsColiision, deathPlayer);
 		CollisionEngine.overlap(ship.collision, smallsBallsColiision, deathPlayer);
