@@ -151,6 +151,7 @@ class Player extends Entity {
 		explosion.x = display.x;
 		explosion.y = display.y;
 		explosion.scaleX = explosion.scaleY = 0.7;
+		explosion.timeline.frameRate = 1/90;
 		explosion.offsetX = -70;
 		explosion.offsetY = -20;
 		explosion.timeline.playAnimation("explode", false);
