@@ -8,7 +8,6 @@ import com.collision.platformer.CollisionGroup;
 import com.collision.platformer.CollisionBox;
 import com.gEngine.display.Sprite;
 import com.framework.utils.Entity;
-import GlobalGameData.GGD;
 
 class Ball extends Entity {
 	private static inline var GROUND_LIMIT = 0.90;

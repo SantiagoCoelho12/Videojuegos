@@ -5,10 +5,8 @@ import js.lib.Math;
 import kha.math.FastVector2;
 import paths.LinearPath;
 import paths.Path;
-import com.loading.basicResources.SparrowLoader;
 import com.loading.basicResources.FontLoader;
 import kha.Assets;
-import kha.Font;
 import com.gEngine.display.Text;
 import com.gEngine.display.StaticLayer;
 import gameObjects.Bullet;
@@ -58,8 +56,8 @@ class GameState extends State {
 		atlas.add(new ImageLoader("ship"));
 		atlas.add(new ImageLoader("ball"));
 		atlas.add(new ImageLoader("bullet"));
-		atlas.add(new FontLoader(Assets.fonts.GalaxyName, 27));
 		atlas.add(new ImageLoader("asteroid"));
+		atlas.add(new FontLoader(Assets.fonts.GalaxyName, 27));
 		resources.add(atlas);
 	}
 
@@ -192,11 +190,7 @@ class GameState extends State {
 		changeState(new GameOver(count));
 	}
 
-	/*#if DEBUGDRAW
-	override function draw(framebuffer:kha.Canvas) {
-		super.draw(framebuffer);
-		var camera = stage.defaultCamera();
-		CollisionEngine.renderDebug(framebuffer, camera);
+	override function destroy() {
+		touchJoystick.destroy();
 	}
-	#end*/
 }

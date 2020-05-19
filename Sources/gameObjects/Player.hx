@@ -1,12 +1,9 @@
 package gameObjects;
 
 import com.gEngine.helper.Screen;
-import js.html.TimeElement;
-import com.gEngine.helper.Timeline;
 import com.gEngine.GEngine;
 import GlobalGameData.GGD;
 import com.framework.utils.Input;
-import kha.input.KeyCode;
 import com.framework.utils.XboxJoystick;
 import com.gEngine.display.Sprite;
 import com.collision.platformer.CollisionBox;

@@ -3,7 +3,6 @@ package gameObjects;
 import com.gEngine.display.Sprite;
 import GlobalGameData.GGD;
 import com.collision.platformer.CollisionGroup;
-import com.gEngine.helper.RectangleDisplay;
 import com.collision.platformer.CollisionBox;
 import com.framework.utils.Entity;
 

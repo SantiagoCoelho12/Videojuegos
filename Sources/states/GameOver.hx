@@ -1,6 +1,5 @@
 package states;
 
-import GlobalGameData.GGD;
 import gameObjects.Player;
 import com.gEngine.display.Sprite;
 import kha.Color;
