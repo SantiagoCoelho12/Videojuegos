@@ -54,8 +54,8 @@ class Player extends Entity {
 	}
 
 	inline function deathAnimation(dt:Float) {
-		if(this.isDead()){
-			explosion.y += 60*dt;
+		if (this.isDead()) {
+			explosion.y += 60 * dt;
 		}
 	}
 
@@ -95,20 +95,24 @@ class Player extends Entity {
 		if (id == XboxJoystick.LEFT_DPAD) {
 			if (value == 1) {
 				collision.accelerationX = -PLAYER_SPEED * 4;
+				display.rotation = -0.1;
 				display.scaleX = -Math.abs(display.scaleX);
 			} else {
 				if (collision.accelerationX < 0) {
 					collision.accelerationX = 0;
+					display.rotation = 0;
 				}
 			}
 		}
 		if (id == XboxJoystick.RIGHT_DPAD) {
 			if (value == 1) {
 				collision.accelerationX = PLAYER_SPEED * 4;
+				display.rotation = 0.1;
 				display.scaleX = Math.abs(display.scaleX);
 			} else {
 				if (collision.accelerationX > 0) {
 					collision.accelerationX = 0;
+					display.rotation = 0;
 				}
 			}
 		}
@@ -151,7 +155,7 @@ class Player extends Entity {
 		explosion.x = display.x;
 		explosion.y = display.y;
 		explosion.scaleX = explosion.scaleY = 0.7;
-		explosion.timeline.frameRate = 1/90;
+		explosion.timeline.frameRate = 1 / 90;
 		explosion.offsetX = -70;
 		explosion.offsetY = -20;
 		explosion.timeline.playAnimation("explode", false);
