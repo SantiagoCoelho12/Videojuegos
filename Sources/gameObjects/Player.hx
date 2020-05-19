@@ -95,7 +95,7 @@ class Player extends Entity {
 		if (id == XboxJoystick.LEFT_DPAD) {
 			if (value == 1) {
 				collision.accelerationX = -PLAYER_SPEED * 4;
-				display.rotation = -0.1;
+				display.rotation = -0.05;
 				display.scaleX = -Math.abs(display.scaleX);
 			} else {
 				if (collision.accelerationX < 0) {
@@ -107,7 +107,7 @@ class Player extends Entity {
 		if (id == XboxJoystick.RIGHT_DPAD) {
 			if (value == 1) {
 				collision.accelerationX = PLAYER_SPEED * 4;
-				display.rotation = 0.1;
+				display.rotation = 0.05;
 				display.scaleX = Math.abs(display.scaleX);
 			} else {
 				if (collision.accelerationX > 0) {
