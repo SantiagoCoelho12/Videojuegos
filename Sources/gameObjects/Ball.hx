@@ -25,15 +25,19 @@ class Ball extends Entity {
 	var rotationMovement:Float = 1;
 	var timer:Float = 0;
 	var radio = 0;
+	var animation:Sprite;
 
 	public function new(layer:Layer, collisions:CollisionGroup, X:Float = 0, Y:Float = 0, i:Int = 0) {
 		super();
+		animation = new Sprite("explosion");
 		screenHeight = Screen.getHeight();
 		screenWidth = Screen.getWidth();
 		velocity = new FastVector2(150, 150);
 		collisionGroup = collisions;
 		display = new Sprite("ball");
 		collision = new CollisionBox();
+		setExplosion(X, Y);
+		layer.addChild(animation);
 		layer.addChild(display);
 		display.pivotX = display.width() / 2;
 		display.pivotY = display.height() / 2;
@@ -58,6 +62,9 @@ class Ball extends Entity {
 	}
 
 	public function explode():Void {
+		animation.x = display.x;
+		animation.y = display.y;
+		animation.timeline.playAnimation("explode", false);
 		collision.removeFromParent();
 		collisionGroup.remove(collision);
 		display.removeFromParent();
@@ -131,5 +138,13 @@ class Ball extends Entity {
 		collision.width = (display.width() * 0.25) - 12;
 		collision.height = (display.height() * 0.25) - 10;
 		collision.userData = this;
+	}
+
+	inline function setExplosion(X:Float, Y:Float) {
+		if (X == 0 && Y == 0)
+			animation.scaleX = animation.scaleY = 1.5;
+		animation.offsetX = -30;
+		animation.offsetY = 0;
+		animation.timeline.playAnimation("sleep");
 	}
 }
