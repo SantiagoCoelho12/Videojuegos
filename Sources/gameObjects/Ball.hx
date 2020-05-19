@@ -70,8 +70,8 @@ class Ball extends Entity {
 	public function explode():Void {
 		animation.x = display.x;
 		animation.y = display.y;
+		explosionChannel = Audio.play(Assets.sounds.explosion);
 		animation.timeline.playAnimation("explode", false);
-		explosionChannel = Audio.play(Assets.sounds.explosionPlayers);
 		collision.removeFromParent();
 		collisionGroup.remove(collision);
 		display.removeFromParent();
